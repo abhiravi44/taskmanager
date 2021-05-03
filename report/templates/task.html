@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% include 'messages.html' %}
+    {% load crispy_forms_tags %}
+    <form  method="post">
+      {% csrf_token %}
+
+      {{ form|crispy }}
+
+      <button type="submit" class="btn btn-primary" >Submit</button>
+    </form>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+      $("#id_team").change(function() {
+        var url="{% url 'teamlead:ajax_team_members' %}";
+        var team = $(this).val();
+
+        $.ajax({
+          url :url,
+          data:{'team':team},
+          success:function(data){
+            $("#id_assigned_to").html(data);
+          }
+        });
+      });
+
+    </script>
+
+{% endblock %}
